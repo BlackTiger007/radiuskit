@@ -1,3 +1,5 @@
+import '$lib/server/seedAdmin';
+
 import type { Handle } from '@sveltejs/kit';
 import * as auth from '$lib/server/auth';
 
