@@ -1,20 +1,52 @@
-import { mysqlTable, serial, int, varchar, datetime } from 'drizzle-orm/mysql-core';
+import { nas, type Nas } from './schema/nas';
+import { radacct, type Radacct } from './schema/radacct';
+import { radcheck, type RadCheck } from './schema/radcheck';
+import { radgroupcheck, type RadGroupCheck } from './schema/radgroupcheck';
+import { radgroupreply, type RadGroupReply } from './schema/radgroupreply';
+import { radpostauth, type RadPostAuth } from './schema/radpostauth';
+import { radreply, type RadReply } from './schema/radreply';
+import { radusergroup, type RadUserGroup } from './schema/radusergroup';
 
-export const user = mysqlTable('user', {
-	id: varchar('id', { length: 255 }).primaryKey(),
-	age: int('age'),
-	username: varchar('username', { length: 32 }).notNull().unique(),
-	passwordHash: varchar('password_hash', { length: 255 }).notNull()
-});
+export const schema = {
+	nas,
+	radacct,
+	radcheck,
+	radgroupcheck,
+	radgroupreply,
+	radpostauth,
+	radreply,
+	radusergroup
+};
 
-export const session = mysqlTable('session', {
-	id: varchar('id', { length: 255 }).primaryKey(),
-	userId: varchar('user_id', { length: 255 })
-		.notNull()
-		.references(() => user.id),
-	expiresAt: datetime('expires_at').notNull()
-});
+export {
+	nas,
+	radacct,
+	radcheck,
+	radgroupcheck,
+	radgroupreply,
+	radpostauth,
+	radreply,
+	radusergroup
+};
 
-export type Session = typeof session.$inferSelect;
+export interface Schema {
+	Nas: Nas;
+	Radacct: Radacct;
+	RadCheck: RadCheck;
+	RadGroupCheck: RadGroupCheck;
+	RadGroupReply: RadGroupReply;
+	RadPostAuth: RadPostAuth;
+	RadReply: RadReply;
+	RadUserGroup: RadUserGroup;
+}
 
-export type User = typeof user.$inferSelect;
+export type {
+	Nas,
+	Radacct,
+	RadCheck,
+	RadGroupCheck,
+	RadGroupReply,
+	RadPostAuth,
+	RadReply,
+	RadUserGroup
+};
