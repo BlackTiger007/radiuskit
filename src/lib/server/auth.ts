@@ -5,7 +5,7 @@ import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
 
-const DAY_IN_MS = 1000 * 60 * 60 * 24;
+const MIN_IN_MS = 1000 * 60 * 15; // 15 Min
 
 export const sessionCookieName = 'auth-session';
 
@@ -20,7 +20,7 @@ export async function createSession(token: string, userId: string) {
 	const session: table.Session = {
 		id: sessionId,
 		userId,
-		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
+		expiresAt: new Date(Date.now() + MIN_IN_MS * 30)
 	};
 	await db.insert(table.session).values(session);
 	return session;
@@ -49,9 +49,9 @@ export async function validateSessionToken(token: string) {
 		return { session: null, user: null };
 	}
 
-	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
+	const renewSession = Date.now() >= session.expiresAt.getTime() - MIN_IN_MS * 15;
 	if (renewSession) {
-		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
+		session.expiresAt = new Date(Date.now() + MIN_IN_MS * 30);
 		await db
 			.update(table.session)
 			.set({ expiresAt: session.expiresAt })
