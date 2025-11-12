@@ -1,11 +1,12 @@
 import { mysqlTable, int, varchar, timestamp } from 'drizzle-orm/mysql-core';
 
 export const radpostauth = mysqlTable('radpostauth', {
-	id: int().notNull().primaryKey().autoincrement(),
-	user: varchar({ length: 64 }).notNull().default(''),
+	id: int().notNull().autoincrement().primaryKey(),
+	username: varchar({ length: 64 }).notNull().default(''),
 	pass: varchar({ length: 64 }).notNull().default(''),
 	reply: varchar({ length: 32 }).notNull().default(''),
-	date: timestamp().notNull()
+	authdate: timestamp().notNull().defaultNow().onUpdateNow(),
+	class: varchar({ length: 64 }).notNull().default('')
 });
 
 export type RadPostAuth = typeof radpostauth.$inferSelect;
