@@ -6,6 +6,7 @@ import { radgroupreply, type RadGroupReply } from './schema/radgroupreply';
 import { radpostauth, type RadPostAuth } from './schema/radpostauth';
 import { radreply, type RadReply } from './schema/radreply';
 import { radusergroup, type RadUserGroup } from './schema/radusergroup';
+import { nasreload, type NasReload } from './schema/nasreload';
 import { session, type Session } from './schema/session';
 import { user, type User } from './schema/user';
 
@@ -18,6 +19,7 @@ export const schema = {
 	radpostauth,
 	radreply,
 	radusergroup,
+	nasreload,
 	session,
 	user
 };
@@ -31,6 +33,7 @@ export {
 	radpostauth,
 	radreply,
 	radusergroup,
+	nasreload,
 	session,
 	user
 };
@@ -44,6 +47,7 @@ export interface Schema {
 	RadPostAuth: RadPostAuth;
 	RadReply: RadReply;
 	RadUserGroup: RadUserGroup;
+	NasReload: NasReload;
 	Session: Session;
 	User: User;
 }
@@ -57,6 +61,7 @@ export type {
 	RadPostAuth,
 	RadReply,
 	RadUserGroup,
+	NasReload,
 	Session,
 	User
 };
