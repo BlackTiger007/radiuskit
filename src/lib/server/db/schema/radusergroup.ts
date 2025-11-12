@@ -1,16 +1,14 @@
-import { mysqlTable, int, varchar, primaryKey, index } from 'drizzle-orm/mysql-core';
+import { mysqlTable, int, varchar, index } from 'drizzle-orm/mysql-core';
 
 export const radusergroup = mysqlTable(
 	'radusergroup',
 	{
-		UserName: varchar({ length: 64 }).notNull().default(''),
-		GroupName: varchar({ length: 64 }).notNull().default(''),
+		id: int({ unsigned: true }).notNull().autoincrement().primaryKey(),
+		username: varchar({ length: 64 }).notNull().default(''),
+		groupname: varchar({ length: 64 }).notNull().default(''),
 		priority: int().notNull().default(1)
 	},
-	(table) => [
-		primaryKey({ columns: [table.UserName, table.GroupName] }),
-		index('UserName_idx').on(table.UserName)
-	]
+	(table) => [index('username_idx').on(table.username)]
 );
 
 export type RadUserGroup = typeof radusergroup.$inferSelect;
