@@ -120,6 +120,8 @@ server {
 }
 EOL
 
+sudo mv /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default.disabled
+sudo find /etc/nginx/sites-enabled/ -xtype l -exec rm {} \;
 sudo ln -sf /etc/nginx/sites-available/radiuskit /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
