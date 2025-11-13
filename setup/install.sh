@@ -67,7 +67,7 @@ if [ ! -d "$PROJECT_DIR" ]; then
 fi
 cd radiuskit
 
-# npm Install als normaler Benutzer (nicht root)
+# npm Install als normaler Benutzer
 sudo chown -R $USER:$USER $PROJECT_DIR
 npm install
 
@@ -89,18 +89,20 @@ sudo openssl req -x509 -nodes -days 365 \
   -newkey rsa:2048 \
   -keyout /etc/nginx/ssl/radiuskit.key \
   -out /etc/nginx/ssl/radiuskit.crt \
-  -subj "/C=DE/ST=State/L=City/O=RadiusKit/OU=IT/CN=radiuskit.local"
+  -subj "/C=DE/ST=State/L=City/O=RadiusKit/OU=IT/CN=localhost"
 
 NGINX_CONF="/etc/nginx/sites-available/radiuskit"
 sudo tee $NGINX_CONF > /dev/null <<EOL
 server {
-    listen 80;
-    server_name radiuskit.local;
+    listen 80 default_server;
+    listen [::]:80 default_server;
     return 301 https://\$host\$request_uri;
 }
+
 server {
-    listen 443 ssl;
-    server_name radiuskit.local;
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+    server_name _;
 
     ssl_certificate /etc/nginx/ssl/radiuskit.crt;
     ssl_certificate_key /etc/nginx/ssl/radiuskit.key;
@@ -146,6 +148,9 @@ sudo systemctl daemon-reload
 sudo systemctl enable radiuskit
 sudo systemctl start radiuskit
 
+# Am Ende des Skripts
+VM_IP=$(hostname -I | awk '{print $1}')
 echo "=== Installation abgeschlossen ==="
-echo "Dashboard erreichbar unter: https://radiuskit.local"
+echo "Dashboard erreichbar unter: https://${VM_IP}"
 echo "Admin-Zugang: admin / adminadmin (bitte ändern)"
+
