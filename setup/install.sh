@@ -8,12 +8,24 @@ RADIUS_CLIENT_SECRET="3qcmpi3fu939"
 PROJECT_DIR="/var/www/radiuskit"
 
 echo "=== RadiusKit Installer ==="
+
+# --- Update & grundlegende Pakete installieren ---
 echo "1. Update & grundlegende Pakete installieren"
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y curl git build-essential ufw mysql-server freeradius freeradius-mysql nginx nodejs npm openssl
+sudo apt install -y curl git build-essential ufw openssl software-properties-common
+
+# --- Node.js 24 installieren ---
+echo "1a. Node.js 24 installieren"
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
+sudo apt install -y nodejs
+sudo npm install -g npm@latest
+
+# Prüfen
+echo "Node-Version: $(node -v), NPM-Version: $(npm -v)"
 
 # --- MySQL einrichten ---
 echo "2. MySQL konfigurieren"
+sudo apt install -y mysql-server
 sudo systemctl enable mysql
 sudo systemctl start mysql
 
@@ -24,18 +36,15 @@ GRANT ALL PRIVILEGES ON radius.* TO 'radius_user'@'localhost';
 FLUSH PRIVILEGES;
 MYSQL_SCRIPT
 
-# --- FreeRADIUS konfigurieren ---
-echo "3. FreeRADIUS konfigurieren"
-
+# --- FreeRADIUS installieren und konfigurieren ---
+echo "3. FreeRADIUS installieren und konfigurieren"
+sudo apt install -y freeradius freeradius-mysql
 SQL_MOD="/etc/freeradius/3.0/mods-available/sql"
 sudo sed -i 's/dialect = "sqlite"/dialect = "mysql"/' $SQL_MOD
-sudo sed -i 's/server = "localhost"/server = "localhost"/' $SQL_MOD
 sudo sed -i "s/login = .*/login = \"radius_user\"/" $SQL_MOD
 sudo sed -i "s/password = .*/password = \"${MYSQL_PASS}\"/" $SQL_MOD
-sudo sed -i 's/radius_db = "radius"/radius_db = "radius"/' $SQL_MOD
 sudo ln -sf /etc/freeradius/3.0/mods-available/sql /etc/freeradius/3.0/mods-enabled/
 
-# Client hinzufügen
 CLIENT_CONF="/etc/freeradius/3.0/clients.conf"
 if ! grep -q "client socket_client" $CLIENT_CONF; then
 sudo tee -a $CLIENT_CONF > /dev/null <<EOL
@@ -49,7 +58,7 @@ fi
 sudo systemctl enable freeradius
 sudo systemctl restart freeradius
 
-# --- Node.js + RadiusKit ---
+# --- RadiusKit installieren ---
 echo "4. RadiusKit installieren"
 sudo mkdir -p /var/www
 cd /var/www
@@ -57,21 +66,23 @@ if [ ! -d "$PROJECT_DIR" ]; then
     sudo git clone https://github.com/BlackTiger007/radiuskit.git
 fi
 cd radiuskit
-sudo npm install
+
+# npm Install als normaler Benutzer (nicht root)
+sudo chown -R $USER:$USER $PROJECT_DIR
+npm install
 
 # .env erstellen
-sudo tee .env > /dev/null <<EOL
+tee .env > /dev/null <<EOL
 DATABASE_URL="mysql://radius_user:${MYSQL_PASS}@localhost:3306/radius"
 EOL
 
-# Drizzle push & Build
 npm run db:push
 npm run build
 
-# --- Nginx mit lokalem HTTPS ---
+# --- Nginx + HTTPS ---
 echo "5. Nginx konfigurieren"
+sudo apt install -y nginx
 sudo ufw allow 'Nginx Full'
-sudo ufw enable
 
 sudo mkdir -p /etc/nginx/ssl
 sudo openssl req -x509 -nodes -days 365 \
@@ -87,14 +98,12 @@ server {
     server_name radiuskit.local;
     return 301 https://\$host\$request_uri;
 }
-
 server {
     listen 443 ssl;
     server_name radiuskit.local;
 
     ssl_certificate /etc/nginx/ssl/radiuskit.crt;
     ssl_certificate_key /etc/nginx/ssl/radiuskit.key;
-
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
 
