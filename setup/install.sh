@@ -76,7 +76,7 @@ tee .env > /dev/null <<EOL
 DATABASE_URL="mysql://radius_user:${MYSQL_PASS}@localhost:3306/radius"
 EOL
 
-npm run db:push
+npx drizzle-kit migrate
 npm run build
 
 # --- Nginx + HTTPS ---
