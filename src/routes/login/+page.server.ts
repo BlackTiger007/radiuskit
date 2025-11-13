@@ -12,6 +12,10 @@ export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
 		return redirect(302, resolve('/'));
 	}
+	if (window.location.protocol === 'http:') {
+		throw fail(400, { message: 'Please use HTTPS to access this page.' });
+	}
+
 	return {};
 };
 
