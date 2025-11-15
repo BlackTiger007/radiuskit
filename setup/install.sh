@@ -93,10 +93,12 @@ sudo openssl req -x509 -nodes -days 365 \
 
 NGINX_CONF="/etc/nginx/sites-available/radiuskit"
 sudo tee $NGINX_CONF > /dev/null <<EOL
+limit_req_zone $binary_remote_addr zone=one:10m rate=5r/s;
+
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    return 301 https://\$host\$request_uri;
+    return 301 https://$host$request_uri;
 }
 
 server {
@@ -108,14 +110,39 @@ server {
     ssl_certificate_key /etc/nginx/ssl/radiuskit.key;
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
 
+    # Security-Header
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin" always;
+    add_header Permissions-Policy "geolocation=(), microphone=()" always;
+    add_header Strict-Transport-Security "max-age=63072000" always;
+
+    # Proxy für alle Routen
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_cache_bypass \$http_upgrade;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /login {
+        limit_req zone=one burst=10;
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
     }
 }
 EOL
