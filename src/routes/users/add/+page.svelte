@@ -16,6 +16,17 @@
 	</div>
 
 	<div class="form-control">
+		<label for="hash_method" class="label">Passwort-Format</label>
+		<select name="hash_method" class="select-bordered select w-full">
+			<option value="MD5" selected>MD5 (empfohlen)</option>
+			<option value="Cleartext">Klartext</option>
+		</select>
+		<label for="hash_method" class="label text-sm text-warning">
+			MD5 ist sicherer als Klartext.
+		</label>
+	</div>
+
+	<div class="form-control">
 		<label for="password" class="label">Passwort</label>
 		<input
 			name="password"
@@ -24,10 +35,6 @@
 			minlength="6"
 			class="input-bordered input w-full"
 		/>
-		<label for="password" class="label text-sm text-error">
-			Hinweis: Passwort wird als Cleartext in radcheck gespeichert (FreeRADIUS-Standard). <br />
-			TODO: Bessere Lösung implementieren.
-		</label>
 	</div>
 
 	<div class="form-control">
