@@ -92,7 +92,7 @@ sudo openssl req -x509 -nodes -days 365 \
   -subj "/C=DE/ST=State/L=City/O=RadiusKit/OU=IT/CN=localhost"
 
 NGINX_CONF="/etc/nginx/sites-available/radiuskit"
-sudo tee $NGINX_CONF > /dev/null <<EOL
+sudo tee "$NGINX_CONF" > /dev/null << 'EOL'
 limit_req_zone $binary_remote_addr zone=one:10m rate=5r/s;
 
 server {
