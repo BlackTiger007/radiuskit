@@ -3,7 +3,8 @@
 	import type { PageData } from './$types';
 	export let data: PageData;
 
-	let password = data.user.password;
+	let password = '';
+	let hashMethod: 'MD5' | 'Cleartext' = 'MD5'; // Standardmäßig MD5
 	let groups = data.user.groups.join(', ');
 	let replies = JSON.stringify(data.user.replies, null, 2);
 </script>
@@ -23,6 +24,17 @@
 	</div>
 
 	<div class="form-control w-full">
+		<label for="hash_method" class="label">Passwort-Format</label>
+		<select name="hash_method" class="select-bordered select w-full" bind:value={hashMethod}>
+			<option value="MD5">MD5 (empfohlen)</option>
+			<option value="Cleartext">Klartext</option>
+		</select>
+		<label for="hash_method" class="label text-sm text-error">
+			Hinweis: MD5 ist sicherer als Klartext. FreeRADIUS unterstützt beide.
+		</label>
+	</div>
+
+	<div class="form-control w-full">
 		<label for="groups" class="label">Gruppen (kommagetrennt)</label>
 		<input type="text" name="groups" class="input-bordered input w-full" bind:value={groups} />
 	</div>
@@ -39,7 +51,6 @@
 	</div>
 </form>
 
-<!-- Löschen-Formular -->
 <form method="POST" action="?/delete" class="mt-4">
 	<button type="submit" class="btn btn-error">Benutzer löschen</button>
 </form>
