@@ -5,7 +5,7 @@ export const radpostauth = mysqlTable('radpostauth', {
 	username: varchar({ length: 64 }).notNull().default(''),
 	pass: varchar({ length: 64 }).notNull().default(''),
 	reply: varchar({ length: 32 }).notNull().default(''),
-	authdate: timestamp().notNull().defaultNow().onUpdateNow(),
+	authdate: timestamp({ fsp: 6, mode: 'string' }).notNull().defaultNow().onUpdateNow(),
 	class: varchar({ length: 64 }).notNull().default('')
 });
 
