@@ -1,6 +1,6 @@
 import { hash, verify } from '@node-rs/argon2';
 import { encodeBase32LowerCase } from '@oslojs/encoding';
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
@@ -12,8 +12,8 @@ export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
 		return redirect(302, resolve('/'));
 	}
-	if (window.location.protocol === 'http:') {
-		throw fail(400, { message: 'Please use HTTPS to access this page.' });
+	if (event.url.protocol === 'http:') {
+		throw error(400, { message: 'Please use HTTPS to access this page.' });
 	}
 
 	return {};
