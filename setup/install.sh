@@ -82,7 +82,6 @@ npm run build
 # --- Nginx + HTTPS ---
 echo "5. Nginx konfigurieren"
 sudo apt install -y nginx
-sudo ufw allow 'Nginx Full'
 
 sudo mkdir -p /etc/nginx/ssl
 sudo openssl req -x509 -nodes -days 365 \
@@ -175,6 +174,54 @@ EOL
 sudo systemctl daemon-reload
 sudo systemctl enable radiuskit
 sudo systemctl start radiuskit
+
+# --- Fail2ban installieren & konfigurieren ---
+echo "7. Fail2ban installieren & konfigurieren"
+sudo apt install fail2ban -y
+
+FAIL2BAN_FILE="/etc/fail2ban/jail.local"
+sudo tee $FAIL2BAN_FILE > /dev/null <<EOL
+[sshd]
+enabled = true
+port = 22
+backend = systemd
+maxretry = 5
+bantime = 15m
+findtime = 10m
+
+[nginx-http-auth]
+enabled = true
+backend = systemd
+EOL
+
+sudo systemctl restart fail2ban
+sudo systemctl enable fail2ban
+
+# Fail2ban Status einmalig anzeigen (optional, ohne Abbruch bei Fehler)
+sudo fail2ban-client status || true
+
+# --- Firewall / UFW Regeln ---
+echo "8. UFW konfigurieren"
+sudo ufw --force reset
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# SSH nur im lokalen Netz
+sudo ufw allow from 192.168.1.0/24 to any port 22 proto tcp
+
+# RADIUS nur für NAS/Router
+sudo ufw allow from 192.168.1.1 to any port 1812 proto udp
+sudo ufw allow from 192.168.1.1 to any port 1813 proto udp
+
+# HTTP/HTTPS für Webzugriff
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Firewall aktivieren
+sudo ufw --force enable
+
+# Statusausgabe (informativ)
+sudo ufw status verbose || true
 
 # Am Ende des Skripts
 VM_IP=$(hostname -I | awk '{print $1}')
