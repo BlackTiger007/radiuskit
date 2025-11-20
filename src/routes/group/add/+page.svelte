@@ -1,5 +1,7 @@
 <script>
 	import { resolve } from '$app/paths';
+	import List from '$lib/components/list.svelte';
+	import { RADGROUPCHECK_ATTRIBUTES } from '$lib/types/attribute/radgroupcheck';
 </script>
 
 <h1 class="mb-4 text-2xl font-semibold">Neue RadGroupCheck Gruppe hinzufügen</h1>
@@ -18,7 +20,7 @@
 
 	<div>
 		<label for="Attribute" class="label">Attribut</label>
-		<input type="text" name="Attribute" class="input-bordered input w-full" required />
+		<input type="text" name="Attribute" class="input-bordered input w-full" list="radgroupcheck" />
 	</div>
 
 	<div>
@@ -36,3 +38,5 @@
 		<a href={resolve('/group')} class="btn btn-secondary">Zurück zur Übersicht</a>
 	</div>
 </form>
+
+<List id="radgroupcheck" data={[...RADGROUPCHECK_ATTRIBUTES]}></List>
