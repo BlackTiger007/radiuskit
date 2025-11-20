@@ -27,7 +27,7 @@
 			{#each data.users as user}
 				<tr>
 					<td class="font-medium">{user.UserName}</td>
-					<td>{user.password ?? '-'}</td>
+					<td>{user.password ?? '*******'}</td>
 					<td>{user.loginTime ?? '-'}</td>
 					<td>
 						{#if user.groups.length > 0}
