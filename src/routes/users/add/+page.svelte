@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { resolve } from '$app/paths';
+	import List from '$lib/components/list.svelte';
+	import type { PageData } from './$types';
+	export let data: PageData;
 </script>
 
 <form
@@ -51,6 +54,7 @@
 			name="group"
 			class="input-bordered input w-full"
 			placeholder="z. B. guests oder admins"
+			list="group"
 		/>
 	</div>
 
@@ -71,3 +75,5 @@
 		<a href={resolve('/users')} class="btn">Abbrechen</a>
 	</div>
 </form>
+
+<List id="group" data={data.groups}></List>

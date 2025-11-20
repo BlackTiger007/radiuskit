@@ -1,9 +1,22 @@
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { radcheck, radusergroup } from '$lib/server/db/schema';
+import { radcheck, radgroupcheck, radusergroup } from '$lib/server/db/schema';
 import { resolve } from '$app/paths';
-import { hash } from '@node-rs/argon2';
+import crypto from 'crypto';
+
+export const load: PageServerLoad = async () => {
+	const groups = await db
+		.select({
+			name: radgroupcheck.groupname
+		})
+		.from(radgroupcheck);
+
+	// Array von Strings
+	const groupNames = groups.map((g) => g.name);
+
+	return { groups: groupNames };
+};
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -27,13 +40,7 @@ export const actions: Actions = {
 		let attribute: string;
 
 		if (hashMethod === 'MD5') {
-			const hashed = await hash(password, {
-				memoryCost: 19456,
-				timeCost: 3,
-				outputLen: 32,
-				parallelism: 1
-			});
-			valueToStore = hashed;
+			valueToStore = crypto.createHash('md5').update(password).digest('hex');
 			attribute = 'MD5-Password';
 		} else {
 			valueToStore = password;

@@ -2,7 +2,7 @@ import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/server/db';
 import { radcheck, radreply, radusergroup } from '$lib/server/db/schema';
 import { and, eq, or } from 'drizzle-orm';
-import { hash } from '@node-rs/argon2';
+import crypto from 'crypto';
 import { redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
 
@@ -52,13 +52,7 @@ export const actions: Actions = {
 			let attribute: string;
 
 			if (hashMethod === 'MD5') {
-				const hashed = await hash(password, {
-					memoryCost: 19456,
-					timeCost: 3,
-					outputLen: 32,
-					parallelism: 1
-				});
-				valueToStore = hashed;
+				valueToStore = crypto.createHash('md5').update(password).digest('hex');
 				attribute = 'MD5-Password';
 			} else {
 				valueToStore = password;
