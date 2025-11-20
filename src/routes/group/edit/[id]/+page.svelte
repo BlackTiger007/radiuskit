@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import List from '$lib/components/list.svelte';
+	import { RADGROUPCHECK_ATTRIBUTES } from '$lib/types/attribute/radgroupcheck.js';
 
 	export let data;
 </script>
@@ -25,7 +27,7 @@
 			name="Attribute"
 			value={data.group.attribute}
 			class="input-bordered input w-full"
-			required
+			list="radgroupcheck"
 		/>
 	</div>
 
@@ -59,3 +61,5 @@
 		<a href={resolve('/group')} class="btn btn-secondary">Zurück</a>
 	</div>
 </form>
+
+<List id="radgroupcheck" data={[...RADGROUPCHECK_ATTRIBUTES]}></List>
