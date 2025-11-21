@@ -73,7 +73,35 @@ npm install
 
 # .env erstellen
 tee .env > /dev/null <<EOL
-DATABASE_URL="mysql://radius_user:${MYSQL_PASS}@localhost:3306/radius"
+# Core
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=radius_user
+DB_PASSWORD=${MYSQL_PASS}
+DB_NAME=radius
+
+# Optional
+DB_POOL_SIZE=
+DB_TIMEZONE=
+DB_DECIMAL_NUMBERS=
+DB_SUPPORT_BIG_NUMBERS=
+DB_BIG_NUMBER_STRINGS=
+DB_NAMED_PLACEHOLDERS=
+DB_MULTIPLE_STATEMENTS=
+DB_DEBUG=
+DB_TRACE=
+
+# SSL: Pfade oder Base64-Inhalte
+DB_SSL_PFX=
+DB_SSL_KEY=
+DB_SSL_PASSPHRASE=
+DB_SSL_CERT=
+DB_SSL_CA=
+DB_SSL_CRL=
+
+# SSL-Verhalten
+DB_SSL_CIPHERS=
+DB_SSL_REJECT_UNAUTHORIZED=true
 EOL
 
 npx drizzle-kit migrate
