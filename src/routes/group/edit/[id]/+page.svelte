@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import List from '$lib/components/list.svelte';
 	import { RADGROUPCHECK_ATTRIBUTES } from '$lib/types/attribute/radgroupcheck.js';
+	import { RADIUS_OPERATORS } from '$lib/types/operator.js';
 
 	export let data;
 </script>
@@ -38,6 +39,7 @@
 			name="op"
 			value={data.group.op}
 			class="input-bordered input w-full"
+			list="operator"
 			required
 		/>
 	</div>
@@ -63,3 +65,4 @@
 </form>
 
 <List id="radgroupcheck" data={[...RADGROUPCHECK_ATTRIBUTES]}></List>
+<List id="operator" data={[...RADIUS_OPERATORS]}></List>

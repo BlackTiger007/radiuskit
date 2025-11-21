@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import List from '$lib/components/list.svelte';
 	import { RADGROUPCHECK_ATTRIBUTES } from '$lib/types/attribute/radgroupcheck';
+	import { RADIUS_OPERATORS } from '$lib/types/operator';
 </script>
 
 <h1 class="mb-4 text-2xl font-semibold">Neue RadGroupCheck Gruppe hinzufügen</h1>
@@ -25,7 +26,7 @@
 
 	<div>
 		<label for="op" class="label">Operator</label>
-		<input type="text" name="op" class="input-bordered input w-20" required />
+		<input type="text" name="op" class="input-bordered input w-20" list="operator" required />
 	</div>
 
 	<div>
@@ -40,3 +41,4 @@
 </form>
 
 <List id="radgroupcheck" data={[...RADGROUPCHECK_ATTRIBUTES]}></List>
+<List id="operator" data={[...RADIUS_OPERATORS]}></List>
