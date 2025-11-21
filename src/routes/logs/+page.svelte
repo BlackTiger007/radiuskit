@@ -63,8 +63,8 @@
 			>
 				<td>{log.username}</td>
 				<td>{log.nasipaddress}</td>
-				<td>{new Date(log.acctstarttime).toLocaleString()}</td>
-				<td>{new Date(log.acctstoptime).toLocaleString()}</td>
+				<td>{log.acctstarttime ? new Date(log.acctstarttime).toLocaleString() : '-'}</td>
+				<td>{log.acctstoptime ? new Date(log.acctstoptime).toLocaleString() : '-'}</td>
 				<td>{log.calledstationid}</td>
 				<td>{log.callingstationid}</td>
 				<td>{log.acctterminatecause}</td>
