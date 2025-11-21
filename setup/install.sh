@@ -194,6 +194,8 @@ WorkingDirectory=${PROJECT_DIR}
 EnvironmentFile=${PROJECT_DIR}/.env
 ExecStart=/usr/bin/node build/index.js
 Restart=on-failure
+KillMode=control-group
+TimeoutStopSec=10
 
 [Install]
 WantedBy=multi-user.target
