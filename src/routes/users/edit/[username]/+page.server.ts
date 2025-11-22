@@ -5,6 +5,7 @@ import { and, eq, or } from 'drizzle-orm';
 import crypto from 'crypto';
 import { redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
+import type { RadReplayAttribute } from '$lib/types/attribute/radreply';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const username = params.username;
@@ -90,7 +91,10 @@ export const actions: Actions = {
 		}
 
 		// Replies aktualisieren
-		const replies = JSON.parse(repliesRaw ?? '[]') as { attribute: string; value: string }[];
+		const replies = JSON.parse(repliesRaw ?? '[]') as {
+			attribute: RadReplayAttribute;
+			value: string;
+		}[];
 		await db.delete(radreply).where(eq(radreply.username, username));
 		for (const r of replies) {
 			await db.insert(radreply).values({
@@ -101,7 +105,7 @@ export const actions: Actions = {
 			});
 		}
 
-		return { success: true };
+		throw redirect(303, resolve('/users'));
 	},
 
 	delete: async ({ params }) => {
