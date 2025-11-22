@@ -5,7 +5,7 @@ import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
 
-const MIN_IN_MS = 1000 * 60 * 15; // 15 Min
+const MIN_IN_MS = 1000 * 60;
 
 export const sessionCookieName = 'auth-session';
 
