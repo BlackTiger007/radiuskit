@@ -2,11 +2,6 @@
 	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	export let data: PageData;
-
-	let password = '';
-	let hashMethod: 'MD5' | 'Cleartext' = 'MD5'; // Standardmäßig MD5
-	let groups = data.user.groups.join(', ');
-	let replies = JSON.stringify(data.user.replies, null, 2);
 </script>
 
 <h1 class="mb-6 text-3xl font-semibold">Benutzer bearbeiten: {data.user.username}</h1>
@@ -17,31 +12,49 @@
 		<input
 			type="text"
 			name="password"
+			id="password"
 			class="input-bordered input w-full"
-			bind:value={password}
+			value={data.user.password}
 			placeholder="Neues Passwort oder leer lassen"
 		/>
 	</div>
 
 	<div class="form-control w-full">
 		<label for="hash_method" class="label">Passwort-Format</label>
-		<select name="hash_method" class="select-bordered select w-full" bind:value={hashMethod}>
+		<select
+			name="hash_method"
+			id="hash_method"
+			class="select-bordered select w-full"
+			value={data.user.password ? 'Cleartext' : 'MD5'}
+		>
 			<option value="MD5">MD5 (empfohlen)</option>
 			<option value="Cleartext">Klartext</option>
 		</select>
-		<label for="hash_method" class="label text-sm text-error">
-			Hinweis: MD5 ist sicherer als Klartext. FreeRADIUS unterstützt beide.
+		<label for="hash_method" class="label text-sm text-warning">
+			MD5 ist sicherer als Klartext.
 		</label>
 	</div>
 
 	<div class="form-control w-full">
 		<label for="groups" class="label">Gruppen (kommagetrennt)</label>
-		<input type="text" name="groups" class="input-bordered input w-full" bind:value={groups} />
+		<input
+			type="text"
+			name="groups"
+			id="groups"
+			class="input-bordered input w-full"
+			value={data.user.groups.join(', ')}
+			autocomplete="off"
+		/>
 	</div>
 
 	<div class="form-control w-full">
 		<label for="replies" class="label">Replies (JSON Array)</label>
-		<textarea name="replies" class="textarea-bordered textarea w-full" rows="6" bind:value={replies}
+		<textarea
+			name="replies"
+			id="replies"
+			class="textarea-bordered textarea w-full"
+			rows="6"
+			value={JSON.stringify(data.user.replies, null, 2)}
 		></textarea>
 	</div>
 
