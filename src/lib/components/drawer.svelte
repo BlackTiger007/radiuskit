@@ -1,10 +1,31 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { onMount } from 'svelte';
 	let { children } = $props();
+
+	let isOpen = $state(true);
+
+	// Beim Mounten LocalStorage auslesen
+	onMount(() => {
+		const stored = localStorage.getItem('drawerOpen');
+		if (stored !== null) {
+			isOpen = stored === 'true';
+		}
+	});
+
+	function update() {
+		localStorage.setItem('drawerOpen', isOpen.toString());
+	}
 </script>
 
 <div class="drawer-open drawer">
-	<input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
+	<input
+		id="drawer-toggle"
+		type="checkbox"
+		class="drawer-toggle"
+		bind:checked={isOpen}
+		onchange={update}
+	/>
 	<div class="drawer-content p-6">
 		{@render children()}
 	</div>
