@@ -2,7 +2,11 @@ import { nas, type Nas } from './schema/nas';
 import { radacct, type Radacct } from './schema/radacct';
 import { radcheck, type RadCheck } from './schema/radcheck';
 import { radgroupcheck, type RadGroupCheck } from './schema/radgroupcheck';
-import { radgroupreply, type RadGroupReply } from './schema/radgroupreply';
+import {
+	radgroupreply,
+	type RadGroupReply,
+	type RadGroupReplyInsert
+} from './schema/radgroupreply';
 import { radpostauth, type RadPostAuth } from './schema/radpostauth';
 import { radreply, type RadReply, type RadReplyInsert } from './schema/radreply';
 import { radusergroup, type RadUserGroup } from './schema/radusergroup';
@@ -47,6 +51,7 @@ export interface Schema {
 	RadPostAuth: RadPostAuth;
 	RadReply: RadReply;
 	RadReplyInsert: RadReplyInsert;
+	RadGroupReplyInsert: RadGroupReplyInsert;
 	RadUserGroup: RadUserGroup;
 	NasReload: NasReload;
 	Session: Session;
@@ -63,6 +68,7 @@ export type {
 	RadReply,
 	RadReplyInsert,
 	RadUserGroup,
+	RadGroupReplyInsert,
 	NasReload,
 	Session,
 	User
