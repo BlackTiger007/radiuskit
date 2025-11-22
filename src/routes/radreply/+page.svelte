@@ -35,7 +35,7 @@
 						Bearbeiten
 					</a>
 
-					<form method="POST">
+					<form method="POST" action="?/delete">
 						<input type="hidden" name="id" value={item.id} />
 						<button type="submit" class="btn btn-sm btn-error">Löschen</button>
 					</form>
