@@ -196,6 +196,8 @@ ExecStart=/usr/bin/node build/index.js
 Restart=on-failure
 KillMode=control-group
 TimeoutStopSec=10
+StandardOutput=file:/var/log/radiuskit.log
+StandardError=file:/var/log/radiuskit.err
 
 [Install]
 WantedBy=multi-user.target
