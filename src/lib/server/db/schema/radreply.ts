@@ -14,3 +14,4 @@ export const radreply = mysqlTable(
 );
 
 export type RadReply = typeof radreply.$inferSelect;
+export type RadReplyInsert = typeof radreply.$inferInsert;
