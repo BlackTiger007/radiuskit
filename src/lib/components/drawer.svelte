@@ -118,6 +118,31 @@
 					</a>
 				</li>
 
+				<!-- Radgroupreply Verwaltung -->
+				<li>
+					<a
+						href={resolve('/radgroupreply')}
+						class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+						data-tip="RADIUS Group Reply"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="my-1.5 size-5"
+						>
+							<path d="M8 6H3l3-3M3 6l3 3" />
+							<circle cx="14.5" cy="7" r="3" />
+							<path d="M11.5 14c0-2 1.5-4 3-4s3 2 3 4v2" />
+						</svg>
+						<span class="is-drawer-close:hidden">Radgroupreply</span>
+					</a>
+				</li>
+
 				<!-- Logs -->
 				<li>
 					<a
