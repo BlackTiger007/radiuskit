@@ -237,7 +237,7 @@ sudo ufw default deny incoming
 sudo ufw default allow outgoing
 
 # SSH nur im lokalen Netz
-sudo ufw allow from 192.168.1.0/24 to any port 22 proto tcp
+sudo ufw allow 22/tcp
 
 # RADIUS nur für NAS/Router
 sudo ufw allow from 192.168.1.1 to any port 1812 proto udp
