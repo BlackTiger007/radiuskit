@@ -6,7 +6,7 @@
 
 <h1 class="mb-6 text-3xl font-semibold">NAS bearbeiten: {data.nas.nasname}</h1>
 
-<form method="POST" class="space-y-4">
+<form method="POST" action="?/update" class="space-y-4">
 	<div class="grid grid-cols-2 gap-4">
 		<div class="form-control w-full">
 			<label for="nasname" class="label">Name</label>
@@ -101,7 +101,7 @@
 	</div>
 </form>
 
-<form method="POST" class="mt-2">
+<form method="POST" action="?/delete" class="mt-2">
 	<input type="hidden" name="action" value="delete" />
 	<button type="submit" class="btn btn-error">Löschen</button>
 </form>
