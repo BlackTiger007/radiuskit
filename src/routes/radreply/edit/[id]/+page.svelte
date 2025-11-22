@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import List from '$lib/components/list.svelte';
 	import { RADIUS_OPERATORS } from '$lib/types/operator';
+	import { RADREPLAY_ATTRIBUTES } from '$lib/types/attribute/radreply';
 
 	export let data: PageData;
 </script>
@@ -20,6 +21,9 @@
 				name="username"
 				class="input-bordered input w-full"
 				value={data.entry.username}
+				autocomplete="off"
+				list="usernames"
+				required
 			/>
 		</div>
 
@@ -30,6 +34,9 @@
 				name="attribute"
 				class="input-bordered input w-full"
 				value={data.entry.attribute}
+				list="radreplay"
+				autocomplete="off"
+				required
 			/>
 		</div>
 
@@ -41,6 +48,7 @@
 				class="input-bordered input w-20"
 				list="operator"
 				value={data.entry.op}
+				autocomplete="off"
 				required
 			/>
 		</div>
@@ -52,6 +60,8 @@
 				name="value"
 				class="input-bordered input w-full"
 				value={data.entry.value}
+				autocomplete="off"
+				required
 			/>
 		</div>
 	</div>
@@ -68,3 +78,5 @@
 </form>
 
 <List id="operator" data={[...RADIUS_OPERATORS]}></List>
+<List id="radreplay" data={[...RADREPLAY_ATTRIBUTES]}></List>
+<List id="usernames" data={[...data.usernames]}></List>
