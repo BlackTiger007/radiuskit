@@ -1,19 +1,17 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { page } from '$app/state';
-
 	let { children } = $props();
 </script>
 
 <div class="drawer-open drawer">
-	<input id="drawer-toggle" type="checkbox" class="drawer-toggle" checked />
+	<input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content p-6">
 		{@render children()}
 	</div>
 
 	<div class="drawer-side is-drawer-close:overflow-visible">
 		<div
-			class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64"
+			class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-56"
 		>
 			<!-- Sidebar Navigation -->
 			<ul class="menu w-full grow">
@@ -68,6 +66,31 @@
 							<circle cx="12" cy="7" r="4"></circle>
 						</svg>
 						<span class="is-drawer-close:hidden">Benutzer</span>
+					</a>
+				</li>
+
+				<!-- Radreply Verwaltung -->
+				<li>
+					<a
+						href={resolve('/radreply')}
+						class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+						data-tip="RADIUS Reply"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="my-1.5 size-5"
+						>
+							<path d="M8 6H3l3-3M3 6l3 3" />
+							<circle cx="14.5" cy="7" r="3" />
+							<path d="M11.5 14c0-2 1.5-4 3-4s3 2 3 4v2" />
+						</svg>
+						<span class="is-drawer-close:hidden">Radreply</span>
 					</a>
 				</li>
 
@@ -198,7 +221,7 @@
 			<!-- Logout -->
 			<a
 				href={resolve('/logout')}
-				class="btn mt-auto mb-4 btn-block btn-outline btn-error is-drawer-close:tooltip is-drawer-close:tooltip-right"
+				class="btn mx-auto mt-auto btn-block w-4/5 btn-outline btn-error is-drawer-close:tooltip is-drawer-close:tooltip-right is-drawer-close:flex is-drawer-close:items-center is-drawer-close:p-0"
 				data-sveltekit-preload-data="off"
 				data-tip="Abmelden"
 			>
