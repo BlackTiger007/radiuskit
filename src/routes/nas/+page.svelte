@@ -4,7 +4,7 @@
 	export let data: PageData;
 </script>
 
-<h1 class="mb-6 text-3xl font-semibold">NAS-Verwaltung</h1>
+<h1 class="mb-6 text-3xl font-semibold">Network-Access-Server Verwaltung</h1>
 
 <a href={resolve('/nas/add')} class="btn mb-4">NAS hinzufügen</a>
 
