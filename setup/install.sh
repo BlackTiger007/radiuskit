@@ -101,7 +101,7 @@ DB_SSL_CRL=
 
 # SSL-Verhalten
 DB_SSL_CIPHERS=
-DB_SSL_REJECT_UNAUTHORIZED=true
+DB_SSL_REJECT_UNAUTHORIZED=
 EOL
 
 npx drizzle-kit migrate
