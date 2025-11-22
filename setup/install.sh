@@ -7,6 +7,8 @@ RADIUS_CLIENT_IP="192.168.1.1"
 RADIUS_CLIENT_SECRET="3qcmpi3fu939"
 PROJECT_DIR="/var/www/radiuskit"
 
+sudo timedatectl set-timezone Europe/Berlin
+
 echo "=== RadiusKit Installer ==="
 
 # --- Update & grundlegende Pakete installieren ---
@@ -41,9 +43,18 @@ echo "3. FreeRADIUS installieren und konfigurieren"
 sudo apt install -y freeradius freeradius-mysql
 SQL_MOD="/etc/freeradius/3.0/mods-available/sql"
 sudo sed -i 's/dialect = "sqlite"/dialect = "mysql"/' $SQL_MOD
+sudo sed -i '/^\s*#\s*server = "localhost"/,/^\s*#\s*password = "radiuspass"/ s/^\([[:space:]]*\)#/\1/' $SQL_MOD
 sudo sed -i "s/login = .*/login = \"radius_user\"/" $SQL_MOD
 sudo sed -i "s/password = .*/password = \"${MYSQL_PASS}\"/" $SQL_MOD
+sudo sed -i 's/^\s*driver = "rlm_sql_null"/# &/' "$SQL_MOD"
+sudo sed -i 's/^#\s*driver = "rlm_sql_\${dialect}"/        driver = "rlm_sql_${dialect}"/' $SQL_MOD
+sudo sed -i '/^\s*tls {/,/^\s*}/ s/^\([[:space:]]*\)/#\1/' $SQL_MOD
 sudo ln -sf /etc/freeradius/3.0/mods-available/sql /etc/freeradius/3.0/mods-enabled/
+
+
+sudo sed -i '/^\s*#\s*auth_log/ s/^\([[:space:]]*\)#/\1/' /etc/freeradius/3.0/sites-enabled/default
+sudo sed -i 's/\([[:space:]]*\)-sql/\1sql/g' /etc/freeradius/3.0/sites-enabled/default
+
 
 CLIENT_CONF="/etc/freeradius/3.0/clients.conf"
 if ! grep -q "client socket_client" $CLIENT_CONF; then
