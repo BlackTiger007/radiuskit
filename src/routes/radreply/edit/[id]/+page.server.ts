@@ -1,10 +1,11 @@
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/server/db';
-import { radreply } from '$lib/server/db/schema';
+import { radcheck, radreply } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { fail, redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
 import type { RadiusOperator } from '$lib/types/operator';
+import type { RadReplayAttribute } from '$lib/types/attribute/radreply';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const id = Number(params.id);
@@ -15,7 +16,16 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw redirect(302, '/radreply');
 	}
 
-	return { entry: item };
+	const usernamesRaw = await db
+		.select({
+			name: radcheck.username
+		})
+		.from(radcheck);
+
+	// Array von Strings
+	const usernames = usernamesRaw.map((g) => g.name);
+
+	return { entry: item, usernames: usernames };
 };
 
 export const actions: Actions = {
@@ -24,7 +34,7 @@ export const actions: Actions = {
 		const form = await request.formData();
 
 		const username = form.get('username') as string;
-		const attribute = form.get('attribute') as string;
+		const attribute = form.get('attribute') as RadReplayAttribute;
 		const op = form.get('op') as RadiusOperator;
 		const value = form.get('value') as string;
 
