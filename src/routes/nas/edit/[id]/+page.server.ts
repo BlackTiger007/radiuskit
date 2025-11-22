@@ -51,7 +51,7 @@ export const actions: Actions = {
 			return fail(500, { message: 'Update fehlgeschlagen' });
 		}
 
-		return { success: true };
+		throw redirect(302, resolve('/radreply'));
 	},
 	delete: async ({ params }) => {
 		const id = Number(params.id);
