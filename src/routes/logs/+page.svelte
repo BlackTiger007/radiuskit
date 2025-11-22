@@ -21,6 +21,10 @@
 		params.set('limit', String(limit));
 		window.location.search = params.toString();
 	};
+
+	const getStatusClass = (reply: string) => {
+		return reply === 'Access-Accept' ? 'text-success' : 'text-error';
+	};
 </script>
 
 <h1 class="mb-4 text-2xl font-semibold">Authentifizierungs-Logs</h1>
@@ -47,27 +51,21 @@
 	<thead>
 		<tr>
 			<th>User</th>
-			<th>NAS IP</th>
-			<th>Startzeit</th>
-			<th>Stoppzeit</th>
-			<th>Access Point</th>
-			<th>Gerät</th>
-			<th>Status</th>
+			<th>Antwort</th>
+			<th>Datum</th>
+			<th>Class</th>
 		</tr>
 	</thead>
 	<tbody>
 		{#each data.logs as log}
 			<tr
-				class={`cursor-pointer ${log.acctterminatecause === 'User-Request' ? 'text-success' : 'text-error'}`}
-				onclick={() => goto(resolve(`/logs/[id]`, { id: log.radacctid.toString() }))}
+				class={`cursor-pointer ${getStatusClass(log.reply)}`}
+				onclick={() => goto(resolve(`/logs/[id]`, { id: log.id.toString() }))}
 			>
 				<td>{log.username}</td>
-				<td>{log.nasipaddress}</td>
-				<td>{log.acctstarttime ? new Date(log.acctstarttime).toLocaleString() : '-'}</td>
-				<td>{log.acctstoptime ? new Date(log.acctstoptime).toLocaleString() : '-'}</td>
-				<td>{log.calledstationid}</td>
-				<td>{log.callingstationid}</td>
-				<td>{log.acctterminatecause}</td>
+				<td>{log.reply}</td>
+				<td>{log.authdate ? new Date(log.authdate).toLocaleString() : '-'}</td>
+				<td>{log.class ?? '-'}</td>
 			</tr>
 		{/each}
 	</tbody>

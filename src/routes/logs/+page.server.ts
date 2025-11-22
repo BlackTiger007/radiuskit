@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
-import { radacct } from '$lib/server/db/schema';
+import { radpostauth } from '$lib/server/db/schema';
 import type { PageServerLoad } from './$types';
-import { count, desc, eq } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ url }) => {
 	const page = Number(url.searchParams.get('page') ?? 1);
@@ -12,17 +12,16 @@ export const load: PageServerLoad = async ({ url }) => {
 
 	const logs = await db
 		.select()
-		.from(radacct)
-		.where(usernameFilter ? eq(radacct.username, usernameFilter) : undefined)
-		.orderBy(desc(radacct.acctstarttime))
+		.from(radpostauth)
+		.where(usernameFilter ? eq(radpostauth.username, usernameFilter) : undefined)
 		.limit(limit)
 		.offset(offset);
 
 	// Optional: Gesamtanzahl für Pagination
 	const totalCountResult = await db
-		.select({ count: count(radacct.username) })
-		.from(radacct)
-		.where(usernameFilter ? eq(radacct.username, usernameFilter) : undefined);
+		.select({ count: count(radpostauth.username) })
+		.from(radpostauth)
+		.where(usernameFilter ? eq(radpostauth.username, usernameFilter) : undefined);
 
 	const totalCount = totalCountResult[0]?.count ?? 0;
 
