@@ -17,6 +17,7 @@
 				name="groupname"
 				class="input-bordered input w-full"
 				value={data.item.groupname}
+				required
 			/>
 		</div>
 
@@ -27,6 +28,7 @@
 				name="attribute"
 				class="input-bordered input w-full"
 				value={data.item.attribute}
+				required
 			/>
 		</div>
 
@@ -44,7 +46,13 @@
 
 		<div class="form-control w-full">
 			<label for="value" class="label">Value</label>
-			<input type="text" name="value" class="input-bordered input w-full" value={data.item.value} />
+			<input
+				type="text"
+				name="value"
+				class="input-bordered input w-full"
+				value={data.item.value}
+				required
+			/>
 		</div>
 	</div>
 
