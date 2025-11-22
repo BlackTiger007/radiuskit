@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	export let data: PageData;
@@ -35,7 +36,7 @@
 						Bearbeiten
 					</a>
 
-					<form method="POST" action="?/delete">
+					<form method="POST" action="?/delete" use:enhance>
 						<input type="hidden" name="id" value={item.id} />
 						<button type="submit" class="btn btn-sm btn-error">Löschen</button>
 					</form>
