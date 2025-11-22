@@ -15,12 +15,12 @@
 
 	<div class="form-control">
 		<label for="username" class="label">Benutzername</label>
-		<input name="username" required class="input-bordered input w-full" />
+		<input name="username" id="username" required class="input-bordered input w-full" />
 	</div>
 
 	<div class="form-control">
 		<label for="hash_method" class="label">Passwort-Format</label>
-		<select name="hash_method" class="select-bordered select w-full">
+		<select name="hash_method" id="hash_method" class="select-bordered select w-full">
 			<option value="MD5" selected>MD5 (empfohlen)</option>
 			<option value="Cleartext">Klartext</option>
 		</select>
@@ -33,6 +33,7 @@
 		<label for="password" class="label">Passwort</label>
 		<input
 			name="password"
+			id="password"
 			type="password"
 			required
 			minlength="6"
@@ -42,7 +43,13 @@
 
 	<div class="form-control">
 		<label for="priority" class="label">Priorität</label>
-		<input name="priority" type="number" required class="input-bordered input w-full" />
+		<input
+			name="priority"
+			id="priority"
+			type="number"
+			required
+			class="input-bordered input w-full"
+		/>
 		<label for="priority" class="label text-sm">
 			Priorität des Benutzers in der Gruppe (niedrigerer Wert = höhere Priorität)
 		</label>
@@ -52,9 +59,11 @@
 		<label for="group" class="label">Gruppe (optional)</label>
 		<input
 			name="group"
+			id="group"
 			class="input-bordered input w-full"
 			placeholder="z. B. guests oder admins"
 			list="group"
+			autocomplete="off"
 		/>
 	</div>
 
@@ -62,6 +71,7 @@
 		<label for="login_time" class="label">Login-Time (optional)</label>
 		<input
 			name="login_time"
+			id="login_time"
 			class="input-bordered input w-full"
 			placeholder="z. B. Mo-Fr0600-1600 oder leer"
 		/>
